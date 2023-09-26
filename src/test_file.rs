@@ -14,7 +14,7 @@ pub struct TestFile {
 
 impl TestFile {
     pub fn new() -> io::Result<Self> {
-        let path = "./TestVmtranslator.vm";
+        let path = "./test.test";
         let lines = TEST_FILE_INIT_LINE_TOTAL;
         let mut file = OpenOptions::new()
             .read(true)

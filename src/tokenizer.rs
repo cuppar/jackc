@@ -4,6 +4,8 @@ use std::{
     path::Path,
 };
 
+use crate::*;
+
 #[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub enum TokenType {
     Keyword,
@@ -341,9 +343,7 @@ impl Tokenizer {
     }
 }
 
-fn report_syntax_error(msg: &str) {
-    panic!("{}", msg);
-}
+
 
 #[cfg(test)]
 mod tests {
