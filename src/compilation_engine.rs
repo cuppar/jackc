@@ -294,8 +294,21 @@ impl CompilationEngine {
         // `let`
         self._eat_keyword()?;
 
-        // varName(todo array)
+        // varName
         self._eat_identifier()?;
+
+        // `[`?
+        if self.tokenizer.token_type() == Some(TokenType::Symbol) && self.tokenizer.symbol() == '['
+        {
+            // `[`
+            self._eat_symbol()?;
+
+            // expression
+            self.compile_expression()?;
+
+            // `]`
+            self._eat_symbol()?;
+        }
 
         // `=`
         self._eat_symbol()?;
@@ -458,11 +471,96 @@ impl CompilationEngine {
         // open term tag
         self.print_to_ast(&format!("<{}>\n", XML_TAG_TERM))?;
 
-        // term(todo: now only is a identifier)
-        if self.tokenizer.token_type() == Some(TokenType::Keyword) {
+        // integer const
+        if self.tokenizer.token_type() == Some(TokenType::IntConst) {
+            self._eat_int_const()?;
+        }
+        // | string const
+        else if self.tokenizer.token_type() == Some(TokenType::StringConst) {
+            self._eat_string_const()?;
+        }
+        // | keyword const
+        else if self.tokenizer.token_type() == Some(TokenType::Keyword)
+            && (self.tokenizer.keyword() == "true"
+                || self.tokenizer.keyword() == "false"
+                || self.tokenizer.keyword() == "null"
+                || self.tokenizer.keyword() == "this")
+        {
             self._eat_keyword()?;
-        } else {
+        }
+        // | (expression)
+        else if self.tokenizer.token_type() == Some(TokenType::Symbol)
+            && self.tokenizer.symbol() == '('
+        {
+            // `(`
+            self._eat_symbol()?;
+            // expression
+            self.compile_expression()?;
+            // `)`
+            self._eat_symbol()?;
+        }
+        // | unaryOp term
+        else if self.tokenizer.token_type() == Some(TokenType::Symbol)
+            && CompilationEngine::_is_unary_op(self.tokenizer.symbol())
+        {
+            // unaryOp
+            self._eat_symbol()?;
+            // term
+            self.compile_term()?;
+        }
+        // look ahead two token
+        else if self.tokenizer.token_type() == Some(TokenType::Identifier) {
+            // first token: varName | className | subroutineName
             self._eat_identifier()?;
+
+            // look ahead 2nd token
+            // varName[expression]
+            if self.tokenizer.token_type() == Some(TokenType::Symbol)
+                && self.tokenizer.symbol() == '['
+            {
+                // `[`
+                self._eat_symbol()?;
+
+                // expression
+                self.compile_expression()?;
+
+                // `]`
+                self._eat_symbol()?;
+            }
+            // subroutineName(expressionList)
+            else if self.tokenizer.token_type() == Some(TokenType::Symbol)
+                && self.tokenizer.symbol() == '('
+            {
+                // `(`
+                self._eat_symbol()?;
+
+                // expressionList
+                self.compile_expression_list()?;
+
+                // `)`
+                self._eat_symbol()?;
+            }
+            // (className | varName).subroutineName(expressionList)
+            else if self.tokenizer.token_type() == Some(TokenType::Symbol)
+                && self.tokenizer.symbol() == '.'
+            {
+                // `.`
+                self._eat_symbol()?;
+
+                // subroutineName
+                self._eat_identifier()?;
+
+                // `(`
+                self._eat_symbol()?;
+
+                // expressionList
+                self.compile_expression_list()?;
+
+                // `)`
+                self._eat_symbol()?;
+            }
+        } else {
+            report_syntax_error("bad term");
         }
 
         // close term tag
@@ -571,11 +669,18 @@ impl CompilationEngine {
     }
 
     fn _eat_symbol(&mut self) -> io::Result<()> {
-        self.print_to_ast(&format!(
-            "<{0}>{1}</{0}>\n",
-            XML_TAG_SYMBOL,
-            self.tokenizer.symbol()
-        ))?;
+        let symbol = self.tokenizer.symbol();
+        let mut symbol_str = symbol.to_string();
+
+        if symbol == '<' {
+            symbol_str = "&lt;".to_string();
+        } else if symbol == '>' {
+            symbol_str = "&gt;".to_string();
+        } else if symbol == '&' {
+            symbol_str = "&amp;".to_string();
+        }
+
+        self.print_to_ast(&format!("<{0}>{1}</{0}>\n", XML_TAG_SYMBOL, symbol_str))?;
         self._get_next_token()?;
         Ok(())
     }
@@ -585,6 +690,28 @@ impl CompilationEngine {
             "<{0}>{1}</{0}>\n",
             XML_TAG_IDENTIFIER,
             self.tokenizer.identifier()
+        ))?;
+        self._get_next_token()?;
+
+        Ok(())
+    }
+
+    fn _eat_int_const(&mut self) -> io::Result<()> {
+        self.print_to_ast(&format!(
+            "<{0}>{1}</{0}>\n",
+            XML_TAG_INT_CONST,
+            self.tokenizer.int_const()
+        ))?;
+        self._get_next_token()?;
+
+        Ok(())
+    }
+
+    fn _eat_string_const(&mut self) -> io::Result<()> {
+        self.print_to_ast(&format!(
+            "<{0}>{1}</{0}>\n",
+            XML_TAG_STRING_CONST,
+            self.tokenizer.string_const()
         ))?;
         self._get_next_token()?;
 
