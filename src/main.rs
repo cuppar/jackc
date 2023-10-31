@@ -1,6 +1,8 @@
 mod compilation_engine;
 mod test_file;
 mod tokenizer;
+mod symbol_table;
+mod vm_writer;
 
 use std::{env::args, error::Error, ffi::OsStr, fs::OpenOptions, io::Write, path::Path, result};
 

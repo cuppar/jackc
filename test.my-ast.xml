@@ -1,18 +1,13 @@
 <varDec>
 <keyword>var</keyword>
 <keyword>int</keyword>
-<identifier>game</identifier>
+<identifier>game<info>(name: game, kind: Some(Var), type: Some("int"), index: Some(0), usage: delcare varName in subroutine)</info></identifier>
 <symbol>,</symbol>
-<identifier>game2</identifier>
+<identifier>game2<info>(name: game2, kind: Some(Var), type: Some("int"), index: Some(1), usage: delcare varName in subroutine)</info></identifier>
 <symbol>;</symbol>
 </varDec>
-bol>
-<subroutineBody>
-<symbol>{</symbol>
-<varDec>
-<keyword>var</keyword>
-<identifier>SquareGame</identifier>
-<identifier>game</identifier>
+uareGame, kind: None, type: None, index: None, usage: use as a user define type)</info></identifier>
+<identifier>game<info>(name: game, kind: Some(Var), type: Some("SquareGame"), index: Some(0), usage: delcare varName in subroutine)</info></identifier>
 <symbol>;</symbol>
 </varDec>
 <statements>
@@ -20,10 +15,15 @@ bol>
 <symbol>}</symbol>
 </subroutineBody>
 </subroutineDec>
-/symbol>
-<identifier>b</identifier>
+</varDec>
+<varDec>
+<keyword>var</keyword>
+<keyword>char</keyword>
+<identifier>a<info>(name: a, kind: Some(Var), type: Some("char"), index: Some(3), usage: delcare varName in subroutine)</info></identifier>
 <symbol>,</symbol>
-<identifier>c</identifier>
+<identifier>b<info>(name: b, kind: Some(Var), type: Some("char"), index: Some(4), usage: delcare varName in subroutine)</info></identifier>
+<symbol>,</symbol>
+<identifier>c<info>(name: c, kind: Some(Var), type: Some("char"), index: Some(5), usage: delcare varName in subroutine)</info></identifier>
 <symbol>;</symbol>
 </varDec>
 <statements>
