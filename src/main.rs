@@ -125,7 +125,7 @@ fn report_syntax_error(msg: &str) {
 const JACK_FILE_EXTENSION: &str = "jack";
 const OUTPUT_TOKEN_FILE_EXTENSION: &str = "my-token.xml";
 const OUTPUT_AST_FILE_EXTENSION: &str = "my-ast.xml";
-const OUTPUT_VM_FILE_EXTENSION: &str = "my-vm.xml";
+const OUTPUT_VM_FILE_EXTENSION: &str = "my-vm.vm";
 
 // TOKEN
 const XML_TAG_KEYWORD: &str = "keyword";
