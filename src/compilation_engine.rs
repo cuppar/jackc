@@ -14,7 +14,10 @@ pub struct CompilationEngine {
     class_symbol_table: SymbolTable,
     subroutine_symbol_table: SymbolTable,
     class_name: String,
+    current_subroutine_type: Option<String>,
+    statement_id: i32,
 }
+
 impl CompilationEngine {
     pub fn new(filepath: &Path) -> io::Result<Self> {
         // output file settings
@@ -45,6 +48,8 @@ impl CompilationEngine {
             class_symbol_table: SymbolTable::new(),
             subroutine_symbol_table: SymbolTable::new(),
             class_name: filename[0..(filename.len() - 5)].to_string(),
+            current_subroutine_type: None,
+            statement_id: 0,
         };
 
         Ok(engine)
@@ -145,12 +150,22 @@ impl CompilationEngine {
     pub fn compile_subroutine_dec(&mut self) -> io::Result<()> {
         // reset subroutine symbol table
         self.subroutine_symbol_table.reset();
+        self.current_subroutine_type = None;
+        self.statement_id = 0;
+
         // open subroutineDec tag
         self.print_to_ast(&format!("<{}>\n", XML_TAG_SUBROUTINE_DEC))?;
 
         // `constructor` `function` or `method`
         let subroutine_type = self.tokenizer.keyword();
+        self.current_subroutine_type = Some(subroutine_type);
         self._eat_keyword()?;
+
+        // handle method
+        if self.current_subroutine_type == Some("mothod".to_string()) {
+            self.subroutine_symbol_table
+                .define("this", &self.class_name, symbol_table::Kind::Arg);
+        }
 
         // void | type
         let mut return_type = "void".to_string();
@@ -184,7 +199,7 @@ impl CompilationEngine {
         let vm_fn_name = format!("{}.{}", self.class_name, subroutine_name);
 
         // subroutineBody
-        self.compile_subroutine_body(&vm_fn_name, &subroutine_type, &return_type)?;
+        self.compile_subroutine_body(&vm_fn_name, &return_type)?;
 
         // close subroutineDec tag
         self.print_to_ast(&format!("</{}>\n", XML_TAG_SUBROUTINE_DEC))?;
@@ -234,7 +249,6 @@ impl CompilationEngine {
     pub fn compile_subroutine_body(
         &mut self,
         subroutine_name: &str,
-        subroutine_type: &str,
         subroutine_return_type: &str,
     ) -> io::Result<()> {
         // open subroutineBody tag
@@ -258,8 +272,22 @@ impl CompilationEngine {
                 .var_count(symbol_table::Kind::Var),
         )?;
 
+        if self.current_subroutine_type == Some("method".to_string()) {
+            self.vm_writer.writePush("argument", 0)?;
+            self.vm_writer.writePop("pointer", 0)?;
+        }
+
+        if self.current_subroutine_type == Some("constructor".to_string()) {
+            self.vm_writer.writePush(
+                "constant",
+                self.class_symbol_table.var_count(symbol_table::Kind::Field),
+            )?;
+            self.vm_writer.writeCall("Memory.alloc", 1)?;
+            self.vm_writer.writePop("pointer", 0)?;
+        }
+
         // statements
-        self.compile_statements(0)?;
+        self.compile_statements()?;
 
         // `}`
         self._eat_symbol()?;
@@ -308,7 +336,7 @@ impl CompilationEngine {
         Ok(())
     }
 
-    pub fn compile_statements(&mut self, deep: i32) -> io::Result<()> {
+    pub fn compile_statements(&mut self) -> io::Result<()> {
         // open statements tag
         self.print_to_ast(&format!("<{}>\n", XML_TAG_STATEMENTS))?;
 
@@ -316,8 +344,8 @@ impl CompilationEngine {
         while self.tokenizer.token_type() == Some(TokenType::Keyword) {
             match self.tokenizer.keyword().as_str() {
                 "let" => self.compile_let()?,
-                "if" => self.compile_if(deep)?,
-                "while" => self.compile_while(deep)?,
+                "if" => self.compile_if()?,
+                "while" => self.compile_while()?,
                 "do" => self.compile_do()?,
                 "return" => self.compile_return()?,
                 _ => report_syntax_error("unknow statement"),
@@ -385,7 +413,8 @@ impl CompilationEngine {
         Ok(())
     }
 
-    pub fn compile_if(&mut self, deep: i32) -> io::Result<()> {
+    pub fn compile_if(&mut self) -> io::Result<()> {
+        self.statement_id += 1;
         // open ifStatement tag
         self.print_to_ast(&format!("<{}>\n", XML_TAG_STATEMENT_IF))?;
 
@@ -406,12 +435,12 @@ impl CompilationEngine {
 
         // code gen
         self.vm_writer.writeArithmetic("not")?;
-        let else_label = format!("else_{deep}");
-        let end_label = format!("end_{deep}");
+        let else_label = format!("else_{}", self.statement_id);
+        let end_label = format!("end_{}", self.statement_id);
         self.vm_writer.writeIf(&else_label)?;
 
         // statements
-        self.compile_statements(deep + 1)?;
+        self.compile_statements()?;
 
         self.vm_writer.writeGoto(&end_label)?;
         self.vm_writer.writeLabel(&else_label)?;
@@ -430,7 +459,7 @@ impl CompilationEngine {
             self._eat_symbol()?;
 
             // statements
-            self.compile_statements(deep + 1)?;
+            self.compile_statements()?;
 
             // `}`
             self._eat_symbol()?;
@@ -443,14 +472,15 @@ impl CompilationEngine {
         Ok(())
     }
 
-    pub fn compile_while(&mut self, deep: i32) -> io::Result<()> {
+    pub fn compile_while(&mut self) -> io::Result<()> {
+        self.statement_id += 1;
         // open whileStatement tag
         self.print_to_ast(&format!("<{}>\n", XML_TAG_STATEMENT_WHILE))?;
 
         // `while`
         self._eat_keyword()?;
 
-        let while_start_label = format!("while_start_{deep}");
+        let while_start_label = format!("while_start_{}", self.statement_id);
         self.vm_writer.writeLabel(&while_start_label)?;
 
         // `(`
@@ -460,7 +490,7 @@ impl CompilationEngine {
         self.compile_expression()?;
 
         self.vm_writer.writeArithmetic("not")?;
-        let end_label = format!("while_end_{deep}");
+        let end_label = format!("while_end_{}", self.statement_id);
         self.vm_writer.writeIf(&end_label)?;
 
         // `)`
@@ -470,7 +500,7 @@ impl CompilationEngine {
         self._eat_symbol()?;
 
         // statements
-        self.compile_statements(deep + 1)?;
+        self.compile_statements()?;
 
         // `}`
         self._eat_symbol()?;
@@ -700,11 +730,14 @@ impl CompilationEngine {
                 // `(`
                 self._eat_symbol()?;
 
+                self.vm_writer.writePush("pointer", 0)?;
+
                 // expressionList
                 let n_args = self.compile_expression_list()?;
 
                 // code gen: fn()
-                self.vm_writer.writeCall(&first_identifier, n_args)?;
+                let method_name = format!("{}.{}", &self.class_name, &first_identifier);
+                self.vm_writer.writeCall(&method_name, n_args + 1)?;
 
                 // `)`
                 self._eat_symbol()?;
@@ -723,34 +756,58 @@ impl CompilationEngine {
                 // `(`
                 self._eat_symbol()?;
 
+                let mut kind = self.subroutine_symbol_table.kind_of(&first_identifier);
+                let mut type_ = self.subroutine_symbol_table.type_of(&first_identifier);
+                let mut index = self.subroutine_symbol_table.index_of(&first_identifier);
+
+                if kind == None {
+                    kind = self.class_symbol_table.kind_of(&first_identifier);
+                    type_ = self.class_symbol_table.type_of(&first_identifier);
+                    index = self.class_symbol_table.index_of(&first_identifier);
+                }
+
+                if let Some(k) = kind {
+                    let segment = match k {
+                        symbol_table::Kind::Static => "static",
+                        symbol_table::Kind::Field => "this",
+                        symbol_table::Kind::Arg => "argument",
+                        symbol_table::Kind::Var => "local",
+                    };
+                    self.vm_writer.writePush(segment, index.unwrap())?;
+                }
+
                 // expressionList
                 let n_args = self.compile_expression_list()?;
 
-                let fn_name = format!("{}.{}", first_identifier, second_identifier);
-                self.vm_writer.writeCall(&fn_name, n_args)?;
-                
+                let mut fn_name = format!("{}.{}", first_identifier, second_identifier);
+                if kind.is_some() {
+                    fn_name = format!("{}.{}", type_.unwrap(), second_identifier);
+                    self.vm_writer.writeCall(&fn_name, n_args + 1)?;
+                } else {
+                    self.vm_writer.writeCall(&fn_name, n_args)?;
+                }
+
                 // `)`
                 self._eat_symbol()?;
             } else {
                 // code gen
                 let mut kind = self.subroutine_symbol_table.kind_of(&first_identifier);
                 let mut index = self.subroutine_symbol_table.index_of(&first_identifier);
-                let mut segment = "";
 
                 if kind == None {
                     kind = self.class_symbol_table.kind_of(&first_identifier);
-                    index = self.subroutine_symbol_table.index_of(&first_identifier);
+                    index = self.class_symbol_table.index_of(&first_identifier);
                 }
 
                 if let Some(k) = kind {
-                    segment = match k {
+                    let segment = match k {
                         symbol_table::Kind::Static => "static",
                         symbol_table::Kind::Field => "this",
                         symbol_table::Kind::Arg => "argument",
                         symbol_table::Kind::Var => "local",
-                    }
+                    };
+                    self.vm_writer.writePush(segment, index.unwrap())?;
                 }
-                self.vm_writer.writePush(segment, index.unwrap())?;
             }
         } else {
             report_syntax_error("bad term");
@@ -822,12 +879,14 @@ impl CompilationEngine {
         if self.tokenizer.symbol() == '(' {
             // `(`
             self._eat_symbol()?;
+            self.vm_writer.writePush("pointer", 0)?;
 
             // expressionList
             let n_args = self.compile_expression_list()?;
 
             // code gen
-            self.vm_writer.writeCall(&first_identifier, n_args)?;
+            let method_name = format!("{}.{}", &self.class_name, &first_identifier);
+            self.vm_writer.writeCall(&method_name, n_args + 1)?;
 
             // `)`
             self._eat_symbol()?;
@@ -842,14 +901,36 @@ impl CompilationEngine {
             // `(`
             self._eat_symbol()?;
 
+            let mut kind = self.subroutine_symbol_table.kind_of(&first_identifier);
+            let mut type_ = self.subroutine_symbol_table.type_of(&first_identifier);
+            let mut index = self.subroutine_symbol_table.index_of(&first_identifier);
+
+            if kind == None {
+                kind = self.class_symbol_table.kind_of(&first_identifier);
+                type_ = self.class_symbol_table.type_of(&first_identifier);
+                index = self.class_symbol_table.index_of(&first_identifier);
+            }
+
+            if let Some(k) = kind {
+                let segment = match k {
+                    symbol_table::Kind::Static => "static",
+                    symbol_table::Kind::Field => "this",
+                    symbol_table::Kind::Arg => "argument",
+                    symbol_table::Kind::Var => "local",
+                };
+                self.vm_writer.writePush(segment, index.unwrap())?;
+            }
+
             // expressionList
             let n_args = self.compile_expression_list()?;
 
-            // code gen
-            self.vm_writer.writeCall(
-                &format!("{}.{}", first_identifier, second_identifier),
-                n_args,
-            )?;
+            let mut fn_name = format!("{}.{}", first_identifier, second_identifier);
+            if kind.is_some() {
+                fn_name = format!("{}.{}", type_.unwrap(), second_identifier);
+                self.vm_writer.writeCall(&fn_name, n_args + 1)?;
+            } else {
+                self.vm_writer.writeCall(&fn_name, n_args)?;
+            }
 
             // `)`
             self._eat_symbol()?;
