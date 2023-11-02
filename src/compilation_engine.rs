@@ -368,14 +368,40 @@ impl CompilationEngine {
         let left = self.tokenizer.identifier();
         self._eat_identifier("use in let statement")?;
 
+        let mut is_array = false;
+
         // `[`?
         if self.tokenizer.token_type() == Some(TokenType::Symbol) && self.tokenizer.symbol() == '['
         {
             // `[`
             self._eat_symbol()?;
 
+            is_array = true;
+
+            let mut kind = self.subroutine_symbol_table.kind_of(&left);
+            let mut index = self.subroutine_symbol_table.index_of(&left);
+
+            if kind == None {
+                kind = self.class_symbol_table.kind_of(&left);
+                index = self.class_symbol_table.index_of(&left);
+            }
+
+            if let Some(k) = kind {
+                let segment = match k {
+                    symbol_table::Kind::Static => "static",
+                    symbol_table::Kind::Field => "this",
+                    symbol_table::Kind::Arg => "argument",
+                    symbol_table::Kind::Var => "local",
+                };
+                self.vm_writer.writePush(segment, index.unwrap())?;
+            } else {
+                panic!();
+            }
+
             // expression
             self.compile_expression()?;
+
+            self.vm_writer.writeArithmetic("add")?;
 
             // `]`
             self._eat_symbol()?;
@@ -387,22 +413,29 @@ impl CompilationEngine {
         // expression
         self.compile_expression()?;
 
-        // code gen: let left = xxx;
-        let mut segment = self.subroutine_symbol_table.kind_of(&left);
-        let mut index = self.subroutine_symbol_table.index_of(&left);
-        if segment == None {
-            segment = self.class_symbol_table.kind_of(&left);
-            index = self.class_symbol_table.index_of(&left);
-        }
+        if is_array {
+            self.vm_writer.writePop("temp", 0)?;
+            self.vm_writer.writePop("pointer", 1)?;
+            self.vm_writer.writePush("temp", 0)?;
+            self.vm_writer.writePop("that", 0)?;
+        } else {
+            // code gen: let left = xxx;
+            let mut segment = self.subroutine_symbol_table.kind_of(&left);
+            let mut index = self.subroutine_symbol_table.index_of(&left);
+            if segment == None {
+                segment = self.class_symbol_table.kind_of(&left);
+                index = self.class_symbol_table.index_of(&left);
+            }
 
-        if let Some(seg) = segment {
-            let seg_str = match seg {
-                symbol_table::Kind::Static => "static",
-                symbol_table::Kind::Field => "this",
-                symbol_table::Kind::Arg => "argument",
-                symbol_table::Kind::Var => "local",
-            };
-            self.vm_writer.writePop(seg_str, index.unwrap())?;
+            if let Some(seg) = segment {
+                let seg_str = match seg {
+                    symbol_table::Kind::Static => "static",
+                    symbol_table::Kind::Field => "this",
+                    symbol_table::Kind::Arg => "argument",
+                    symbol_table::Kind::Var => "local",
+                };
+                self.vm_writer.writePop(seg_str, index.unwrap())?;
+            }
         }
 
         // `;`
@@ -644,7 +677,14 @@ impl CompilationEngine {
         // | string const
         else if self.tokenizer.token_type() == Some(TokenType::StringConst) {
             let string = self.tokenizer.string_const();
-            todo!();
+            let len = string.len();
+            self.vm_writer.writePush("constant", len as i32)?;
+            self.vm_writer.writeCall("String.new", 1)?;
+            for c in string.chars() {
+                self.vm_writer.writePush("constant", c as i32)?;
+                self.vm_writer.writeCall("String.appendChar", 2)?;
+            }
+
             self._eat_string_const()?;
         }
         // | keyword const
@@ -717,8 +757,34 @@ impl CompilationEngine {
                 // `[`
                 self._eat_symbol()?;
 
+                let mut kind = self.subroutine_symbol_table.kind_of(&first_identifier);
+                let mut type_ = self.subroutine_symbol_table.type_of(&first_identifier);
+                let mut index = self.subroutine_symbol_table.index_of(&first_identifier);
+
+                if kind == None {
+                    kind = self.class_symbol_table.kind_of(&first_identifier);
+                    type_ = self.class_symbol_table.type_of(&first_identifier);
+                    index = self.class_symbol_table.index_of(&first_identifier);
+                }
+
+                if let Some(k) = kind {
+                    let segment = match k {
+                        symbol_table::Kind::Static => "static",
+                        symbol_table::Kind::Field => "this",
+                        symbol_table::Kind::Arg => "argument",
+                        symbol_table::Kind::Var => "local",
+                    };
+                    self.vm_writer.writePush(segment, index.unwrap())?;
+                } else {
+                    panic!();
+                }
+
                 // expression
                 self.compile_expression()?;
+
+                self.vm_writer.writeArithmetic("add")?;
+                self.vm_writer.writePop("pointer", 1)?;
+                self.vm_writer.writePush("that", 0)?;
 
                 // `]`
                 self._eat_symbol()?;
