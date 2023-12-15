@@ -9,6 +9,10 @@ Jack is a Java-like object-based simple programing language
 
 ## Example
 
+```bash
+jackc Main.jack
+```
+
 ### Souce code
 
 Main.jack
