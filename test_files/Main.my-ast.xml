@@ -1,515 +1,271 @@
 <class>
-<keyword>class</keyword>
-<identifier>Main<info>(name: Main, kind: None, type: None, index: None, usage: delcare className)</info></identifier>
-<symbol>{</symbol>
-<subroutineDec>
-<keyword>function</keyword>
-<keyword>void</keyword>
-<identifier>main<info>(name: main, kind: None, type: None, index: None, usage: delcare subroutineName in class, return type(void))</info></identifier>
-<symbol>(</symbol>
-<parameterList>
+    <keyword>class</keyword>
+    <identifier>Main<info>(name: Main, kind: None, type: None, index: None, usage: delcare
+        className)</info></identifier>
+    <symbol>{</symbol>
+    <subroutineDec>
+        <keyword>function</keyword>
+        <keyword>void</keyword>
+        <identifier>main<info>(name: main, kind: None, type: None, index: None, usage: delcare
+            subroutineName in class, return type(void))</info></identifier>
+        <symbol>(</symbol>
+        <parameterList>
 </parameterList>
-<symbol>)</symbol>
-<subroutineBody>
-<symbol>{</symbol>
-<varDec>
-<keyword>var</keyword>
-<keyword>int</keyword>
-<identifier>value<info>(name: value, kind: Some(Var), type: Some("int"), index: Some(0), usage: delcare varName in subroutine)</info></identifier>
-<symbol>;</symbol>
-</varDec>
-<statements>
-<doStatement>
-<keyword>do</keyword>
-<identifier>Main<info>(name: Main, kind: None, type: None, index: None, usage: use as subroutineName or (className | varName) in a subroutine call)</info></identifier>
-<symbol>.</symbol>
-<identifier>fillMemory<info>(name: fillMemory, kind: None, type: None, index: None, usage: use as a xxx.subroutineName in a subroutine call)</info></identifier>
-<symbol>(</symbol>
-<expressionList>
-<expression>
-<term>
-<integerConstant>8001</integerConstant>
-</term>
-</expression>
-<symbol>,</symbol>
-<expression>
-<term>
-<integerConstant>16</integerConstant>
-</term>
-</expression>
-<symbol>,</symbol>
-<expression>
-<term>
-<symbol>-</symbol>
-<term>
-<integerConstant>1</integerConstant>
-</term>
-</term>
-</expression>
-</expressionList>
-<symbol>)</symbol>
-<symbol>;</symbol>
-</doStatement>
-<letStatement>
-<keyword>let</keyword>
-<identifier>value<info>(name: value, kind: Some(Var), type: Some("int"), index: Some(0), usage: use in let statement)</info></identifier>
-<symbol>=</symbol>
-<expression>
-<term>
-<identifier>Memory<info>(name: Memory, kind: None, type: None, index: None, usage: use in term varName|className|subroutineName)</info></identifier>
-<symbol>.</symbol>
-<identifier>peek<info>(name: peek, kind: None, type: None, index: None, usage: use in xxx.subroutineName)</info></identifier>
-<symbol>(</symbol>
-<expressionList>
-<expression>
-<term>
-<integerConstant>8000</integerConstant>
-</term>
-</expression>
-</expressionList>
-<symbol>)</symbol>
-</term>
-</expression>
-<symbol>;</symbol>
-</letStatement>
-<doStatement>
-<keyword>do</keyword>
-<identifier>Main<info>(name: Main, kind: None, type: None, index: None, usage: use as subroutineName or (className | varName) in a subroutine call)</info></identifier>
-<symbol>.</symbol>
-<identifier>convert<info>(name: convert, kind: None, type: None, index: None, usage: use as a xxx.subroutineName in a subroutine call)</info></identifier>
-<symbol>(</symbol>
-<expressionList>
-<expression>
-<term>
-<identifier>value<info>(name: value, kind: Some(Var), type: Some("int"), index: Some(0), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-</expression>
-</expressionList>
-<symbol>)</symbol>
-<symbol>;</symbol>
-</doStatement>
-<returnStatement>
-<keyword>return</keyword>
-<symbol>;</symbol>
-</returnStatement>
-</statements>
-<symbol>}</symbol>
-</subroutineBody>
-</subroutineDec>
-<subroutineDec>
-<keyword>function</keyword>
-<keyword>void</keyword>
-<identifier>convert<info>(name: convert, kind: None, type: None, index: None, usage: delcare subroutineName in class, return type(void))</info></identifier>
-<symbol>(</symbol>
-<parameterList>
-<keyword>int</keyword>
-<identifier>value<info>(name: value, kind: Some(Arg), type: Some("int"), index: Some(0), usage: delcare varName(arg) in parameterList)</info></identifier>
-</parameterList>
-<symbol>)</symbol>
-<subroutineBody>
-<symbol>{</symbol>
-<varDec>
-<keyword>var</keyword>
-<keyword>int</keyword>
-<identifier>mask<info>(name: mask, kind: Some(Var), type: Some("int"), index: Some(0), usage: delcare varName in subroutine)</info></identifier>
-<symbol>,</symbol>
-<identifier>position<info>(name: position, kind: Some(Var), type: Some("int"), index: Some(1), usage: delcare varName in subroutine)</info></identifier>
-<symbol>;</symbol>
-</varDec>
-<varDec>
-<keyword>var</keyword>
-<keyword>boolean</keyword>
-<identifier>loop<info>(name: loop, kind: Some(Var), type: Some("boolean"), index: Some(2), usage: delcare varName in subroutine)</info></identifier>
-<symbol>;</symbol>
-</varDec>
-<statements>
-<letStatement>
-<keyword>let</keyword>
-<identifier>loop<info>(name: loop, kind: Some(Var), type: Some("boolean"), index: Some(2), usage: use in let statement)</info></identifier>
-<symbol>=</symbol>
-<expression>
-<term>
-<keyword>true</keyword>
-</term>
-</expression>
-<symbol>;</symbol>
-</letStatement>
-<whileStatement>
-<keyword>while</keyword>
-<symbol>(</symbol>
-<expression>
-<term>
-<identifier>loop<info>(name: loop, kind: Some(Var), type: Some("boolean"), index: Some(2), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-</expression>
-<symbol>)</symbol>
-<symbol>{</symbol>
-<statements>
-<letStatement>
-<keyword>let</keyword>
-<identifier>position<info>(name: position, kind: Some(Var), type: Some("int"), index: Some(1), usage: use in let statement)</info></identifier>
-<symbol>=</symbol>
-<expression>
-<term>
-<identifier>position<info>(name: position, kind: Some(Var), type: Some("int"), index: Some(1), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-<symbol>+</symbol>
-<expression>
-<term>
-<integerConstant>1</integerConstant>
-</term>
-</expression>
-</expression>
-<symbol>;</symbol>
-</letStatement>
-<letStatement>
-<keyword>let</keyword>
-<identifier>mask<info>(name: mask, kind: Some(Var), type: Some("int"), index: Some(0), usage: use in let statement)</info></identifier>
-<symbol>=</symbol>
-<expression>
-<term>
-<identifier>Main<info>(name: Main, kind: None, type: None, index: None, usage: use in term varName|className|subroutineName)</info></identifier>
-<symbol>.</symbol>
-<identifier>nextMask<info>(name: nextMask, kind: None, type: None, index: None, usage: use in xxx.subroutineName)</info></identifier>
-<symbol>(</symbol>
-<expressionList>
-<expression>
-<term>
-<identifier>mask<info>(name: mask, kind: Some(Var), type: Some("int"), index: Some(0), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-</expression>
-</expressionList>
-<symbol>)</symbol>
-</term>
-</expression>
-<symbol>;</symbol>
-</letStatement>
-<ifStatement>
-<keyword>if</keyword>
-<symbol>(</symbol>
-<expression>
-<term>
-<symbol>~</symbol>
-<term>
-<symbol>(</symbol>
-<expression>
-<term>
-<identifier>position<info>(name: position, kind: Some(Var), type: Some("int"), index: Some(1), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-<symbol>&gt;</symbol>
-<expression>
-<term>
-<integerConstant>16</integerConstant>
-</term>
-</expression>
-</expression>
-<symbol>)</symbol>
-</term>
-</term>
-</expression>
-<symbol>)</symbol>
-<symbol>{</symbol>
-<statements>
-<ifStatement>
-<keyword>if</keyword>
-<symbol>(</symbol>
-<expression>
-<term>
-<symbol>~</symbol>
-<term>
-<symbol>(</symbol>
-<expression>
-<term>
-<symbol>(</symbol>
-<expression>
-<term>
-<identifier>value<info>(name: value, kind: Some(Arg), type: Some("int"), index: Some(0), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-<symbol>&amp;</symbol>
-<expression>
-<term>
-<identifier>mask<info>(name: mask, kind: Some(Var), type: Some("int"), index: Some(0), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-</expression>
-</expression>
-<symbol>)</symbol>
-</term>
-<symbol>=</symbol>
-<expression>
-<term>
-<integerConstant>0</integerConstant>
-</term>
-</expression>
-</expression>
-<symbol>)</symbol>
-</term>
-</term>
-</expression>
-<symbol>)</symbol>
-<symbol>{</symbol>
-<statements>
-<doStatement>
-<keyword>do</keyword>
-<identifier>Memory<info>(name: Memory, kind: None, type: None, index: None, usage: use as subroutineName or (className | varName) in a subroutine call)</info></identifier>
-<symbol>.</symbol>
-<identifier>poke<info>(name: poke, kind: None, type: None, index: None, usage: use as a xxx.subroutineName in a subroutine call)</info></identifier>
-<symbol>(</symbol>
-<expressionList>
-<expression>
-<term>
-<integerConstant>8000</integerConstant>
-</term>
-<symbol>+</symbol>
-<expression>
-<term>
-<identifier>position<info>(name: position, kind: Some(Var), type: Some("int"), index: Some(1), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-</expression>
-</expression>
-<symbol>,</symbol>
-<expression>
-<term>
-<integerConstant>1</integerConstant>
-</term>
-</expression>
-</expressionList>
-<symbol>)</symbol>
-<symbol>;</symbol>
-</doStatement>
-</statements>
-<symbol>}</symbol>
-<keyword>else</keyword>
-<symbol>{</symbol>
-<statements>
-<doStatement>
-<keyword>do</keyword>
-<identifier>Memory<info>(name: Memory, kind: None, type: None, index: None, usage: use as subroutineName or (className | varName) in a subroutine call)</info></identifier>
-<symbol>.</symbol>
-<identifier>poke<info>(name: poke, kind: None, type: None, index: None, usage: use as a xxx.subroutineName in a subroutine call)</info></identifier>
-<symbol>(</symbol>
-<expressionList>
-<expression>
-<term>
-<integerConstant>8000</integerConstant>
-</term>
-<symbol>+</symbol>
-<expression>
-<term>
-<identifier>position<info>(name: position, kind: Some(Var), type: Some("int"), index: Some(1), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-</expression>
-</expression>
-<symbol>,</symbol>
-<expression>
-<term>
-<integerConstant>0</integerConstant>
-</term>
-</expression>
-</expressionList>
-<symbol>)</symbol>
-<symbol>;</symbol>
-</doStatement>
-</statements>
-<symbol>}</symbol>
-</ifStatement>
-</statements>
-<symbol>}</symbol>
-<keyword>else</keyword>
-<symbol>{</symbol>
-<statements>
-<letStatement>
-<keyword>let</keyword>
-<identifier>loop<info>(name: loop, kind: Some(Var), type: Some("boolean"), index: Some(2), usage: use in let statement)</info></identifier>
-<symbol>=</symbol>
-<expression>
-<term>
-<keyword>false</keyword>
-</term>
-</expression>
-<symbol>;</symbol>
-</letStatement>
-</statements>
-<symbol>}</symbol>
-</ifStatement>
-</statements>
-<symbol>}</symbol>
-</whileStatement>
-<returnStatement>
-<keyword>return</keyword>
-<symbol>;</symbol>
-</returnStatement>
-</statements>
-<symbol>}</symbol>
-</subroutineBody>
-</subroutineDec>
-<subroutineDec>
-<keyword>function</keyword>
-<keyword>int</keyword>
-<identifier>nextMask<info>(name: nextMask, kind: None, type: None, index: None, usage: delcare subroutineName in class, return type(int))</info></identifier>
-<symbol>(</symbol>
-<parameterList>
-<keyword>int</keyword>
-<identifier>mask<info>(name: mask, kind: Some(Arg), type: Some("int"), index: Some(0), usage: delcare varName(arg) in parameterList)</info></identifier>
-</parameterList>
-<symbol>)</symbol>
-<subroutineBody>
-<symbol>{</symbol>
-<statements>
-<ifStatement>
-<keyword>if</keyword>
-<symbol>(</symbol>
-<expression>
-<term>
-<identifier>mask<info>(name: mask, kind: Some(Arg), type: Some("int"), index: Some(0), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-<symbol>=</symbol>
-<expression>
-<term>
-<integerConstant>0</integerConstant>
-</term>
-</expression>
-</expression>
-<symbol>)</symbol>
-<symbol>{</symbol>
-<statements>
-<returnStatement>
-<keyword>return</keyword>
-<expression>
-<term>
-<integerConstant>1</integerConstant>
-</term>
-</expression>
-<symbol>;</symbol>
-</returnStatement>
-</statements>
-<symbol>}</symbol>
-<keyword>else</keyword>
-<symbol>{</symbol>
-<statements>
-<returnStatement>
-<keyword>return</keyword>
-<expression>
-<term>
-<identifier>mask<info>(name: mask, kind: Some(Arg), type: Some("int"), index: Some(0), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-<symbol>*</symbol>
-<expression>
-<term>
-<integerConstant>2</integerConstant>
-</term>
-</expression>
-</expression>
-<symbol>;</symbol>
-</returnStatement>
-</statements>
-<symbol>}</symbol>
-</ifStatement>
-</statements>
-<symbol>}</symbol>
-</subroutineBody>
-</subroutineDec>
-<subroutineDec>
-<keyword>function</keyword>
-<keyword>void</keyword>
-<identifier>fillMemory<info>(name: fillMemory, kind: None, type: None, index: None, usage: delcare subroutineName in class, return type(void))</info></identifier>
-<symbol>(</symbol>
-<parameterList>
-<keyword>int</keyword>
-<identifier>startAddress<info>(name: startAddress, kind: Some(Arg), type: Some("int"), index: Some(0), usage: delcare varName(arg) in parameterList)</info></identifier>
-<symbol>,</symbol>
-<keyword>int</keyword>
-<identifier>length<info>(name: length, kind: Some(Arg), type: Some("int"), index: Some(1), usage: delcare varName(arg) in parameterList)</info></identifier>
-<symbol>,</symbol>
-<keyword>int</keyword>
-<identifier>value<info>(name: value, kind: Some(Arg), type: Some("int"), index: Some(2), usage: delcare varName(arg) in parameterList)</info></identifier>
-</parameterList>
-<symbol>)</symbol>
-<subroutineBody>
-<symbol>{</symbol>
-<statements>
-<whileStatement>
-<keyword>while</keyword>
-<symbol>(</symbol>
-<expression>
-<term>
-<identifier>length<info>(name: length, kind: Some(Arg), type: Some("int"), index: Some(1), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-<symbol>&gt;</symbol>
-<expression>
-<term>
-<integerConstant>0</integerConstant>
-</term>
-</expression>
-</expression>
-<symbol>)</symbol>
-<symbol>{</symbol>
-<statements>
-<doStatement>
-<keyword>do</keyword>
-<identifier>Memory<info>(name: Memory, kind: None, type: None, index: None, usage: use as subroutineName or (className | varName) in a subroutine call)</info></identifier>
-<symbol>.</symbol>
-<identifier>poke<info>(name: poke, kind: None, type: None, index: None, usage: use as a xxx.subroutineName in a subroutine call)</info></identifier>
-<symbol>(</symbol>
-<expressionList>
-<expression>
-<term>
-<identifier>startAddress<info>(name: startAddress, kind: Some(Arg), type: Some("int"), index: Some(0), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-</expression>
-<symbol>,</symbol>
-<expression>
-<term>
-<identifier>value<info>(name: value, kind: Some(Arg), type: Some("int"), index: Some(2), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-</expression>
-</expressionList>
-<symbol>)</symbol>
-<symbol>;</symbol>
-</doStatement>
-<letStatement>
-<keyword>let</keyword>
-<identifier>length<info>(name: length, kind: Some(Arg), type: Some("int"), index: Some(1), usage: use in let statement)</info></identifier>
-<symbol>=</symbol>
-<expression>
-<term>
-<identifier>length<info>(name: length, kind: Some(Arg), type: Some("int"), index: Some(1), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-<symbol>-</symbol>
-<expression>
-<term>
-<integerConstant>1</integerConstant>
-</term>
-</expression>
-</expression>
-<symbol>;</symbol>
-</letStatement>
-<letStatement>
-<keyword>let</keyword>
-<identifier>startAddress<info>(name: startAddress, kind: Some(Arg), type: Some("int"), index: Some(0), usage: use in let statement)</info></identifier>
-<symbol>=</symbol>
-<expression>
-<term>
-<identifier>startAddress<info>(name: startAddress, kind: Some(Arg), type: Some("int"), index: Some(0), usage: use in term varName|className|subroutineName)</info></identifier>
-</term>
-<symbol>+</symbol>
-<expression>
-<term>
-<integerConstant>1</integerConstant>
-</term>
-</expression>
-</expression>
-<symbol>;</symbol>
-</letStatement>
-</statements>
-<symbol>}</symbol>
-</whileStatement>
-<returnStatement>
-<keyword>return</keyword>
-<symbol>;</symbol>
-</returnStatement>
-</statements>
-<symbol>}</symbol>
-</subroutineBody>
-</subroutineDec>
-<symbol>}</symbol>
+        <symbol>)</symbol>
+        <subroutineBody>
+            <symbol>{</symbol>
+            <varDec>
+                <keyword>var</keyword>
+                <identifier>Array<info>(name: Array, kind: None, type: None, index: None, usage: use
+                    as a user define type)</info></identifier>
+                <identifier>a<info>(name: a, kind: Some(Var), type: Some("Array"), index: Some(0),
+                    usage: delcare varName in subroutine)</info></identifier>
+                <symbol>;</symbol>
+            </varDec>
+            <varDec>
+                <keyword>var</keyword>
+                <keyword>int</keyword>
+                <identifier>length<info>(name: length, kind: Some(Var), type: Some("int"), index:
+                    Some(1), usage: delcare varName in subroutine)</info></identifier>
+                <symbol>;</symbol>
+            </varDec>
+            <varDec>
+                <keyword>var</keyword>
+                <keyword>int</keyword>
+                <identifier>i<info>(name: i, kind: Some(Var), type: Some("int"), index: Some(2),
+                    usage: delcare varName in subroutine)</info></identifier>
+                <symbol>,</symbol>
+                <identifier>sum<info>(name: sum, kind: Some(Var), type: Some("int"), index: Some(3),
+                    usage: delcare varName in subroutine)</info></identifier>
+                <symbol>;</symbol>
+            </varDec>
+            <statements>
+                <letStatement>
+                    <keyword>let</keyword>
+                    <identifier>length<info>(name: length, kind: Some(Var), type: Some("int"),
+                        index: Some(1), usage: use in let statement)</info></identifier>
+                    <symbol>=</symbol>
+                    <expression>
+                        <term>
+                            <identifier>Keyboard<info>(name: Keyboard, kind: None, type: None,
+                                index: None, usage: use in term varName|className|subroutineName)</info></identifier>
+                            <symbol>.</symbol>
+                            <identifier>readInt<info>(name: readInt, kind: None, type: None, index:
+                                None, usage: use in xxx.subroutineName)</info></identifier>
+                            <symbol>(</symbol>
+                            <expressionList>
+                                <expression>
+                                    <term>
+                                        <stringConstant>How many numbers? </stringConstant>
+                                    </term>
+                                </expression>
+                            </expressionList>
+                            <symbol>)</symbol>
+                        </term>
+                    </expression>
+                    <symbol>;</symbol>
+                </letStatement>
+                <letStatement>
+                    <keyword>let</keyword>
+                    <identifier>a<info>(name: a, kind: Some(Var), type: Some("Array"), index:
+                        Some(0), usage: use in let statement)</info></identifier>
+                    <symbol>=</symbol>
+                    <expression>
+                        <term>
+                            <identifier>Array<info>(name: Array, kind: None, type: None, index:
+                                None, usage: use in term varName|className|subroutineName)</info></identifier>
+                            <symbol>.</symbol>
+                            <identifier>new<info>(name: new, kind: None, type: None, index: None,
+                                usage: use in xxx.subroutineName)</info></identifier>
+                            <symbol>(</symbol>
+                            <expressionList>
+                                <expression>
+                                    <term>
+                                        <identifier>length<info>(name: length, kind: Some(Var),
+                                            type: Some("int"), index: Some(1), usage: use in term
+                                            varName|className|subroutineName)</info></identifier>
+                                    </term>
+                                </expression>
+                            </expressionList>
+                            <symbol>)</symbol>
+                        </term>
+                    </expression>
+                    <symbol>;</symbol>
+                </letStatement>
+                <letStatement>
+                    <keyword>let</keyword>
+                    <identifier>i<info>(name: i, kind: Some(Var), type: Some("int"), index: Some(2),
+                        usage: use in let statement)</info></identifier>
+                    <symbol>=</symbol>
+                    <expression>
+                        <term>
+                            <integerConstant>0</integerConstant>
+                        </term>
+                    </expression>
+                    <symbol>;</symbol>
+                </letStatement>
+                <whileStatement>
+                    <keyword>while</keyword>
+                    <symbol>(</symbol>
+                    <expression>
+                        <term>
+                            <identifier>i<info>(name: i, kind: Some(Var), type: Some("int"), index:
+                                Some(2), usage: use in term varName|className|subroutineName)</info></identifier>
+                        </term>
+                        <symbol>&lt;</symbol>
+                        <expression>
+                            <term>
+                                <identifier>length<info>(name: length, kind: Some(Var), type:
+                                    Some("int"), index: Some(1), usage: use in term
+                                    varName|className|subroutineName)</info></identifier>
+                            </term>
+                        </expression>
+                    </expression>
+                    <symbol>)</symbol>
+                    <symbol>{</symbol>
+                    <statements>
+                        <letStatement>
+                            <keyword>let</keyword>
+                            <identifier>a<info>(name: a, kind: Some(Var), type: Some("Array"),
+                                index: Some(0), usage: use in let statement)</info></identifier>
+                            <symbol>[</symbol>
+                            <expression>
+                                <term>
+                                    <identifier>i<info>(name: i, kind: Some(Var), type: Some("int"),
+                                        index: Some(2), usage: use in term
+                                        varName|className|subroutineName)</info></identifier>
+                                </term>
+                            </expression>
+                            <symbol>]</symbol>
+                            <symbol>=</symbol>
+                            <expression>
+                                <term>
+                                    <identifier>Keyboard<info>(name: Keyboard, kind: None, type:
+                                        None, index: None, usage: use in term
+                                        varName|className|subroutineName)</info></identifier>
+                                    <symbol>.</symbol>
+                                    <identifier>readInt<info>(name: readInt, kind: None, type: None,
+                                        index: None, usage: use in xxx.subroutineName)</info></identifier>
+                                    <symbol>(</symbol>
+                                    <expressionList>
+                                        <expression>
+                                            <term>
+                                                <stringConstant>Enter a number: </stringConstant>
+                                            </term>
+                                        </expression>
+                                    </expressionList>
+                                    <symbol>)</symbol>
+                                </term>
+                            </expression>
+                            <symbol>;</symbol>
+                        </letStatement>
+                        <letStatement>
+                            <keyword>let</keyword>
+                            <identifier>sum<info>(name: sum, kind: Some(Var), type: Some("int"),
+                                index: Some(3), usage: use in let statement)</info></identifier>
+                            <symbol>=</symbol>
+                            <expression>
+                                <term>
+                                    <identifier>sum<info>(name: sum, kind: Some(Var), type:
+                                        Some("int"), index: Some(3), usage: use in term
+                                        varName|className|subroutineName)</info></identifier>
+                                </term>
+                                <symbol>+</symbol>
+                                <expression>
+                                    <term>
+                                        <identifier>a<info>(name: a, kind: Some(Var), type:
+                                            Some("Array"), index: Some(0), usage: use in term
+                                            varName|className|subroutineName)</info></identifier>
+                                        <symbol>[</symbol>
+                                        <expression>
+                                            <term>
+                                                <identifier>i<info>(name: i, kind: Some(Var), type:
+                                                    Some("int"), index: Some(2), usage: use in term
+                                                    varName|className|subroutineName)</info></identifier>
+                                            </term>
+                                        </expression>
+                                        <symbol>]</symbol>
+                                    </term>
+                                </expression>
+                            </expression>
+                            <symbol>;</symbol>
+                        </letStatement>
+                        <letStatement>
+                            <keyword>let</keyword>
+                            <identifier>i<info>(name: i, kind: Some(Var), type: Some("int"), index:
+                                Some(2), usage: use in let statement)</info></identifier>
+                            <symbol>=</symbol>
+                            <expression>
+                                <term>
+                                    <identifier>i<info>(name: i, kind: Some(Var), type: Some("int"),
+                                        index: Some(2), usage: use in term
+                                        varName|className|subroutineName)</info></identifier>
+                                </term>
+                                <symbol>+</symbol>
+                                <expression>
+                                    <term>
+                                        <integerConstant>1</integerConstant>
+                                    </term>
+                                </expression>
+                            </expression>
+                            <symbol>;</symbol>
+                        </letStatement>
+                    </statements>
+                    <symbol>}</symbol>
+                </whileStatement>
+                <doStatement>
+                    <keyword>do</keyword>
+                    <identifier>Output<info>(name: Output, kind: None, type: None, index: None,
+                        usage: use as subroutineName or (className | varName) in a subroutine call)</info></identifier>
+                    <symbol>.</symbol>
+                    <identifier>printString<info>(name: printString, kind: None, type: None, index:
+                        None, usage: use as a xxx.subroutineName in a subroutine call)</info></identifier>
+                    <symbol>(</symbol>
+                    <expressionList>
+                        <expression>
+                            <term>
+                                <stringConstant>The average is </stringConstant>
+                            </term>
+                        </expression>
+                    </expressionList>
+                    <symbol>)</symbol>
+                    <symbol>;</symbol>
+                </doStatement>
+                <doStatement>
+                    <keyword>do</keyword>
+                    <identifier>Output<info>(name: Output, kind: None, type: None, index: None,
+                        usage: use as subroutineName or (className | varName) in a subroutine call)</info></identifier>
+                    <symbol>.</symbol>
+                    <identifier>printInt<info>(name: printInt, kind: None, type: None, index: None,
+                        usage: use as a xxx.subroutineName in a subroutine call)</info></identifier>
+                    <symbol>(</symbol>
+                    <expressionList>
+                        <expression>
+                            <term>
+                                <identifier>sum<info>(name: sum, kind: Some(Var), type: Some("int"),
+                                    index: Some(3), usage: use in term
+                                    varName|className|subroutineName)</info></identifier>
+                            </term>
+                            <symbol>/</symbol>
+                            <expression>
+                                <term>
+                                    <identifier>length<info>(name: length, kind: Some(Var), type:
+                                        Some("int"), index: Some(1), usage: use in term
+                                        varName|className|subroutineName)</info></identifier>
+                                </term>
+                            </expression>
+                        </expression>
+                    </expressionList>
+                    <symbol>)</symbol>
+                    <symbol>;</symbol>
+                </doStatement>
+                <returnStatement>
+                    <keyword>return</keyword>
+                    <symbol>;</symbol>
+                </returnStatement>
+            </statements>
+            <symbol>}</symbol>
+        </subroutineBody>
+    </subroutineDec>
+    <symbol>}</symbol>
 </class>
